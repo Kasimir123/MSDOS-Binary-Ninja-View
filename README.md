@@ -1,10 +1,12 @@
 # MSDOS-Binary-Ninja-View
 Author: **Kasimir Schulz**
 
-_This is a short description meant to fit on one line._
+_Plugin to import MSDOS exe files into binary ninja._
 
 ## Description:
 Plugin to import MSDOS exe files into binary ninja.
+
+Analyzes the code to find the offset to the data section and relocates data and code segments.
 
 ## Minimum Version
 
