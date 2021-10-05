@@ -96,7 +96,7 @@ class MSDOSView(BinaryView):
     @classmethod
     def is_valid_for_data(self, data):
         # check for DOS stub
-        if "This program cannot be run in DOS mode" in data.read(0, 0x100):
+        if b'This program cannot be run in DOS mode' in data.read(0, 0x100):
             return False
         return data.read(0,2) == b'\x4D\x5A'
 
