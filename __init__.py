@@ -126,6 +126,8 @@ class MSDOSView(BinaryView):
         # start smallestOffset by largest possible value
         smallestOffset = 16
 
+        offsets = []
+
         # current end of program to check
         end = header.len
 
@@ -157,6 +159,10 @@ class MSDOSView(BinaryView):
             # if we have a pointer, find the offset from the start of data paragraph (lets us find first item in data)
             elif len(text) == 10 and "mov" == text[0].text and "]" == text[9].text and "ax":
                 val = int(text[8].text[2:], 16)
+                
+                if val not in offsets:
+                    offsets.append(val)
+
                 if val < smallestOffset:
                     smallestOffset = val
                     end = (ds * 16) + header.calculateStartAddress() + smallestOffset
@@ -166,9 +172,25 @@ class MSDOSView(BinaryView):
         print("Start of data in paragraph: ", smallestOffset)
 
         # add the segments
-        self.add_auto_segment(ds, header.calculateDataSize(ds, smallestOffset), header.calculateStartAddress() + header.calculateCodeSize(ds, smallestOffset), header.calculateDataSize(ds, smallestOffset), SegmentFlag.SegmentReadable|SegmentFlag.SegmentContainsData|SegmentFlag.SegmentDenyExecute)	
+        self.add_auto_segment(smallestOffset, header.calculateDataSize(ds, smallestOffset), header.calculateStartAddress() + header.calculateCodeSize(ds, smallestOffset), header.calculateDataSize(ds, smallestOffset), SegmentFlag.SegmentReadable|SegmentFlag.SegmentContainsData|SegmentFlag.SegmentDenyExecute)	
         self.add_auto_segment(header.calculateDataSize(ds, smallestOffset) + ds + smallestOffset, header.calculateCodeSize(ds, smallestOffset), header.calculateStartAddress(), header.calculateCodeSize(ds, smallestOffset), SegmentFlag.SegmentReadable|SegmentFlag.SegmentExecutable)
         self.add_entry_point(header.calculateStartAddress())
+
+        # sort offsets by size
+        offsets.sort()
+
+        # loop through all offsets
+        for i in range(len(offsets)):
+            
+            # get length for remainder of data
+            length = header.calculateDataSize(ds, smallestOffset) - offsets[i] + smallestOffset
+
+            # calculates length to next data if there is another one
+            if i + 1 < len(offsets):
+                length = offsets[i+1] - offsets[i]
+
+            # define the data
+            self.define_user_data_var(offsets[i], "char [" + str(length) + "]")
 
         return True
     
