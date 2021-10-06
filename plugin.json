@@ -1,6 +1,6 @@
 {
     "pluginmetadataversion": 2,
-    "name": "Sample Plugin",
+    "name": "MSDOS Plugin",
     "type": [
         "core",
         "ui",
@@ -12,7 +12,7 @@
         "python2",
         "python3"
     ],
-    "description": "This is a short description meant to fit on one line.",
+    "description": "Plugin to load in MSDOS files.",
     "longdescription": "",
     "license": {
         "name": "MIT",
@@ -24,29 +24,8 @@
         "Windows"
     ],
     "installinstructions": {
-        "Darwin": "Install the following pip packages: ...\n\nInstall the following brew packages: ...",
-        "Linux": "Install the following pip packages: ...\n\nInstall the following apt packages: ...",
-        "Windows": "Install the following pip packages: ...\n\nInstall the following libraries: ..."
     },
-    "dependencies": {
-        "pip": [
-            "array",
-            "of",
-            "pip",
-            "dependencies"
-        ],
-        "apt": [
-            "apt",
-            "packages"
-        ],
-        "installers": [
-            "https://bogus-domain/this-package.exe"
-        ],
-        "other": [
-            "The sample plugin requires [this random package](https://bogus-domain/this-package/) be installed."
-        ]
-    },
-    "version": "1.3.3",
-    "author": "Vector 35 Inc",
-    "minimumbinaryninjaversion": 1200
+    "version": "1.0.0",
+    "author": "Kasimir Schulz",
+    "minimumbinaryninjaversion": 2.4
 }
